@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACID Compliance Pack Configuration",
+  "type": "object",
+  "properties": {
+    "default_isolation_level": {
+      "type": "string",
+      "title": "Default transaction isolation level",
+      "enum": [
+        "READ_UNCOMMITTED",
+        "READ_COMMITTED",
+        "REPEATABLE_READ",
+        "SERIALIZABLE"
+      ],
+      "default": "READ_COMMITTED",
+      "x-ui": {
+        "widget": "select",
+        "descriptions": {
+          "READ_UNCOMMITTED": "Dirty reads possible — never use in production",
+          "READ_COMMITTED": "Default for PostgreSQL/SQL Server — safe for most use cases",
+          "REPEATABLE_READ": "Default for MySQL/InnoDB — prevents non-repeatable reads",
+          "SERIALIZABLE": "Strongest — use for financial/payment transactions"
+        }
+      }
+    },
+    "distributed_transaction_strategy": {
+      "type": "string",
+      "title": "Distributed transaction strategy",
+      "enum": ["saga-choreography", "saga-orchestration", "two-phase-commit", "none"],
+      "default": "saga-orchestration",
+      "x-ui": {
+        "descriptions": {
+          "saga-choreography": "Services emit events and react — good for ≤3 steps",
+          "saga-orchestration": "Central coordinator — good for ≥4 steps, compliance-heavy",
+          "two-phase-commit": "Strong consistency — use only when absolutely required",
+          "none": "All operations within a single DB transaction"
+        }
+      }
+    },
+    "idempotency_key_ttl_hours": {
+      "type": "integer",
+      "title": "Idempotency key TTL (hours)",
+      "minimum": 1,
+      "maximum": 168,
+      "default": 24,
+      "description": "How long to retain idempotency keys for deduplication"
+    },
+    "use_outbox_pattern": {
+      "type": "boolean",
+      "title": "Use Outbox pattern for event publishing",
+      "default": true,
+      "description": "Guarantees at-least-once event delivery without distributed transaction"
+    },
+    "locking_strategy": {
+      "type": "string",
+      "title": "Default locking strategy",
+      "enum": ["optimistic", "pessimistic", "mixed"],
+      "default": "optimistic",
+      "x-ui": {
+        "descriptions": {
+          "optimistic": "Version column + conflict detection on write — best for low-contention",
+          "pessimistic": "SELECT FOR UPDATE — use for high-contention resources",
+          "mixed": "Optimistic by default, pessimistic for specific high-contention operations"
+        }
+      }
+    },
+    "require_acid_analysis_per_mutation": {
+      "type": "boolean",
+      "title": "Require ACID analysis for every write operation",
+      "default": true,
+      "description": "Every micro-task with state mutations must complete the ACID checklist"
+    },
+    "rollback_documentation_required": {
+      "type": "boolean",
+      "title": "Require rollback strategy documentation",
+      "default": true
+    }
+  }
+}

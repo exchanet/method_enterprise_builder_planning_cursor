@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Enterprise Architecture Pack Configuration",
+  "type": "object",
+  "properties": {
+    "primary_pattern": {
+      "type": "string",
+      "title": "Primary architectural pattern",
+      "enum": [
+        "modular-monolith",
+        "microservices",
+        "hexagonal",
+        "cqrs",
+        "event-sourcing",
+        "layered"
+      ],
+      "default": "modular-monolith",
+      "x-ui": { "widget": "select" }
+    },
+    "adr_directory": {
+      "type": "string",
+      "title": "ADR output directory",
+      "default": "docs/adr",
+      "x-ui": { "placeholder": "docs/adr" }
+    },
+    "adr_format": {
+      "type": "string",
+      "title": "ADR format",
+      "enum": ["standard", "madr", "y-statements"],
+      "default": "standard",
+      "description": "standard: context/decision/consequences | madr: Markdown Architectural Decision Records | y-statements: In the context of..."
+    },
+    "c4_diagram_format": {
+      "type": "string",
+      "title": "C4 diagram output format",
+      "enum": ["mermaid", "plantuml", "structurizr", "text"],
+      "default": "mermaid"
+    },
+    "require_adr_for": {
+      "type": "array",
+      "title": "Decision types that require an ADR",
+      "items": {
+        "type": "string",
+        "enum": [
+          "database-selection",
+          "authentication-mechanism",
+          "caching-strategy",
+          "message-queue",
+          "deployment-pattern",
+          "framework-selection",
+          "service-boundary",
+          "data-schema"
+        ]
+      },
+      "default": [
+        "database-selection",
+        "authentication-mechanism",
+        "deployment-pattern",
+        "service-boundary"
+      ]
+    },
+    "generate_c4_levels": {
+      "type": "array",
+      "title": "C4 diagram levels to generate",
+      "items": {
+        "type": "integer",
+        "enum": [1, 2, 3, 4]
+      },
+      "default": [1, 2],
+      "description": "L1: System Context, L2: Container, L3: Component, L4: Code"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Testing Coverage Pack Configuration",
+  "type": "object",
+  "properties": {
+    "unit_coverage_minimum": {
+      "type": "number",
+      "title": "Minimum unit test coverage (%)",
+      "minimum": 90,
+      "maximum": 100,
+      "default": 99
+    },
+    "unit_test_framework": {
+      "type": "string",
+      "title": "Unit test framework",
+      "enum": ["jest", "vitest", "pytest", "go-test", "junit", "nunit", "rspec"],
+      "default": "vitest"
+    },
+    "integration_test_framework": {
+      "type": "string",
+      "title": "Integration test framework",
+      "enum": ["supertest", "httptest", "pytest-requests", "rest-assured"],
+      "default": "supertest"
+    },
+    "e2e_framework": {
+      "type": "string",
+      "title": "E2E test framework",
+      "enum": ["playwright", "cypress", "selenium"],
+      "default": "playwright"
+    },
+    "load_test_tool": {
+      "type": "string",
+      "title": "Load test tool",
+      "enum": ["k6", "artillery", "locust", "jmeter", "gatling"],
+      "default": "k6"
+    },
+    "use_testcontainers": {
+      "type": "boolean",
+      "title": "Use Testcontainers for integration tests",
+      "default": true,
+      "description": "Use real DB/Redis/etc. in containers instead of mocks"
+    },
+    "load_test_scenarios": {
+      "type": "array",
+      "title": "Required load test scenarios",
+      "items": {
+        "type": "string",
+        "enum": ["baseline", "sustained", "spike", "soak", "stress", "volume"]
+      },
+      "default": ["baseline", "sustained", "spike"]
+    },
+    "block_on_coverage_below_threshold": {
+      "type": "boolean",
+      "title": "Block delivery if coverage below minimum",
+      "default": true
+    },
+    "require_security_tests": {
+      "type": "boolean",
+      "title": "Require security tests (OWASP) in every release",
+      "default": true
+    },
+    "require_performance_tests": {
+      "type": "boolean",
+      "title": "Require performance/load tests before production",
+      "default": true
+    }
+  }
+}

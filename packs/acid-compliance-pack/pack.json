@@ -1,0 +1,25 @@
+{
+  "name": "acid-compliance-pack",
+  "version": "1.0.0",
+  "description": "ACID compliance planning pack. Defines transaction boundaries, selects isolation levels, designs idempotency patterns, implements Saga/Outbox for distributed transactions, and documents rollback strategies for enterprise transactional systems.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "activatedInPhases": [4, 6],
+  "hooks": {
+    "onMicrotaskComplete": "./hooks/onInit.md#validateTransactionBoundary",
+    "onPhaseComplete": "./hooks/onInit.md#onPhaseComplete",
+    "onDeliveryReportGenerate": "./hooks/onInit.md#deliveryReportSection"
+  },
+  "config": "./config.schema.json",
+  "provides": [
+    "ACID property checklist per transaction/operation",
+    "Transaction boundary analysis template",
+    "Isolation level selection guide",
+    "Idempotency key implementation pattern",
+    "Outbox pattern for reliable event publishing",
+    "Saga pattern (Choreography and Orchestration) templates",
+    "Optimistic vs pessimistic locking decision guide",
+    "Rollback strategy documentation template",
+    "Distributed transaction risk assessment"
+  ]
+}

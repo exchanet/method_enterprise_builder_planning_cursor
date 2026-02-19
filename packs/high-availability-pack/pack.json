@@ -1,0 +1,24 @@
+{
+  "name": "high-availability-pack",
+  "version": "1.0.0",
+  "description": "High availability and scalability planning pack. Defines SLA/SLO targets, selects HA deployment patterns, designs resilience (circuit breakers, retries, bulkheads), caching strategies, auto-scaling policies, and chaos engineering runbooks.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "activatedInPhases": [2, 5],
+  "hooks": {
+    "onPlanningStart": "./hooks/onInit.md#detectHARequirements",
+    "onPhaseComplete": "./hooks/onInit.md#onPhaseComplete",
+    "onDeliveryReportGenerate": "./hooks/onInit.md#deliveryReportSection"
+  },
+  "config": "./config.schema.json",
+  "provides": [
+    "SLA/SLO/SLI definition templates",
+    "HA deployment pattern selection (Multi-AZ, Blue-Green, Canary)",
+    "Circuit breaker configuration",
+    "Retry policy with exponential backoff",
+    "Caching strategy selection (TTL, event-driven, write-through)",
+    "Auto-scaling policy templates",
+    "Health check endpoint specifications",
+    "Chaos engineering runbook (minimum experiment set)"
+  ]
+}

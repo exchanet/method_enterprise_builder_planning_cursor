@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "High Availability Pack Configuration",
+  "type": "object",
+  "properties": {
+    "target_sla_percent": {
+      "type": "number",
+      "title": "Target availability SLA (%)",
+      "enum": [99, 99.5, 99.9, 99.95, 99.99, 99.999],
+      "default": 99.9,
+      "x-ui": { "widget": "select" }
+    },
+    "deployment_pattern": {
+      "type": "string",
+      "title": "HA deployment pattern",
+      "enum": [
+        "single-region-auto-restart",
+        "multi-az-active-passive",
+        "multi-az-active-active",
+        "multi-region-active-active",
+        "blue-green",
+        "canary"
+      ],
+      "default": "multi-az-active-active",
+      "x-ui": {
+        "widget": "select",
+        "descriptions": {
+          "single-region-auto-restart": "99%: Single region, health checks, auto-restart on failure",
+          "multi-az-active-passive": "99.9%: Multi-AZ with automatic failover to passive",
+          "multi-az-active-active": "99.95%: Both AZs serving traffic, instant failover",
+          "multi-region-active-active": "99.999%: Full active-active across regions",
+          "blue-green": "Zero-downtime deployments with instant rollback",
+          "canary": "Gradual rollout with automatic rollback on SLO breach"
+        }
+      }
+    },
+    "circuit_breaker": {
+      "type": "object",
+      "title": "Circuit Breaker defaults",
+      "properties": {
+        "failure_threshold": {
+          "type": "integer",
+          "title": "Failures before opening circuit",
+          "default": 5
+        },
+        "window_seconds": {
+          "type": "integer",
+          "title": "Failure counting window (seconds)",
+          "default": 60
+        },
+        "open_duration_seconds": {
+          "type": "integer",
+          "title": "Circuit open duration (seconds)",
+          "default": 30
+        }
+      }
+    },
+    "retry_policy": {
+      "type": "object",
+      "title": "Retry policy defaults",
+      "properties": {
+        "max_attempts": {
+          "type": "integer",
+          "default": 3
+        },
+        "base_delay_ms": {
+          "type": "integer",
+          "default": 100
+        },
+        "max_delay_ms": {
+          "type": "integer",
+          "default": 10000
+        },
+        "jitter_percent": {
+          "type": "number",
+          "default": 20,
+          "description": "Add ±N% jitter to prevent thundering herd"
+        }
+      }
+    },
+    "caching_strategy": {
+      "type": "string",
+      "title": "Default caching strategy",
+      "enum": ["cache-aside", "write-through", "write-behind", "event-driven-invalidation"],
+      "default": "cache-aside"
+    },
+    "min_instances": {
+      "type": "integer",
+      "title": "Minimum running instances (HA floor)",
+      "minimum": 1,
+      "default": 2,
+      "description": "Never scale below this number — ensures HA"
+    },
+    "chaos_experiments_required": {
+      "type": "boolean",
+      "title": "Require chaos experiments before production",
+      "default": true
+    }
+  }
+}

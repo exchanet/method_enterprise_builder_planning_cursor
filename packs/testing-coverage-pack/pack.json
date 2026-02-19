@@ -1,0 +1,25 @@
+{
+  "name": "testing-coverage-pack",
+  "version": "1.0.0",
+  "description": "Testing strategy and coverage pack. Defines the enterprise test pyramid, test templates per layer, CI/CD quality gates, critical user journey catalog, and load test scenarios for SLO validation.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "activatedInPhases": [4, 7],
+  "hooks": {
+    "onMicrotaskComplete": "./hooks/onInit.md#validateTestCoverage",
+    "onPhaseComplete": "./hooks/onInit.md#onPhaseComplete",
+    "onQualityGateCheck": "./hooks/onInit.md#qualityGateEvaluation",
+    "onDeliveryReportGenerate": "./hooks/onInit.md#deliveryReportSection"
+  },
+  "config": "./config.schema.json",
+  "provides": [
+    "Enterprise test pyramid allocation (Unit 70%, Integration 20%, E2E 7%, Chaos 3%)",
+    "Unit test templates (happy path, error, edge case, security, performance)",
+    "Integration test scenarios per integration point type",
+    "Critical User Journey (CUJ) catalog template",
+    "Load test scenarios (k6/Artillery templates)",
+    "CI/CD quality gate configuration",
+    "Test report format",
+    "Definition of Done (DoD) checklist"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "planning-engine",
+  "version": "1.0.0",
+  "type": "core",
+  "description": "Core planning engine for Method Enterprise Planning. Provides the infrastructure for loading, validating, and orchestrating enterprise planning packs. Contains zero business logic — only planning infrastructure.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "layer": "core",
+  "responsibilities": [
+    "Load and validate pack configurations",
+    "Orchestrate the 8-phase enterprise planning cycle",
+    "Enforce quality gates and PDCA-T validation",
+    "Manage micro-task backlog state",
+    "Generate delivery reports from accumulated PDCA-T results"
+  ],
+  "exposes": {
+    "hooks": [
+      "onPlanningStart",
+      "onPhaseComplete",
+      "onMicrotaskComplete",
+      "onQualityGateCheck",
+      "onDeliveryReportGenerate"
+    ],
+    "slots": [
+      "phase-output",
+      "microtask-template",
+      "adr-template",
+      "delivery-report-section"
+    ]
+  },
+  "config": "./config.schema.json",
+  "packDirectory": "../../packs",
+  "requiredPacks": [],
+  "optionalPacks": [
+    "enterprise-architecture-pack",
+    "security-compliance-pack",
+    "high-availability-pack",
+    "testing-coverage-pack",
+    "acid-compliance-pack"
+  ]
+}

@@ -1,0 +1,227 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://method-enterprise-builder-planning/core/planning-engine/config.schema.json",
+  "title": "Planning Engine Configuration",
+  "description": "Global configuration schema for the Method Enterprise Planning engine",
+  "type": "object",
+  "required": ["project", "quality_gates"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "title": "Project Settings",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Project name",
+          "description": "Human-readable project name",
+          "minLength": 1,
+          "x-ui": { "placeholder": "My Enterprise System" }
+        },
+        "type": {
+          "type": "string",
+          "title": "System classification",
+          "description": "Primary classification drives default quality requirements",
+          "enum": [
+            "enterprise-grade",
+            "mission-critical",
+            "high-availability",
+            "security-first",
+            "standard"
+          ],
+          "x-ui": {
+            "widget": "select",
+            "descriptions": {
+              "enterprise-grade": "High load, complex transactions, strict security",
+              "mission-critical": "Failure has catastrophic financial/operational impact",
+              "high-availability": "99.9%+ uptime SLA required",
+              "security-first": "Regulated data, PII, financial data",
+              "standard": "Standard development without HA or compliance requirements"
+            }
+          }
+        },
+        "primary_language": {
+          "type": "string",
+          "title": "Primary programming language",
+          "enum": ["typescript", "javascript", "python", "go", "java", "csharp", "rust", "other"],
+          "default": "typescript"
+        },
+        "framework": {
+          "type": "string",
+          "title": "Primary framework",
+          "description": "Used to tailor generated code templates",
+          "x-ui": { "placeholder": "express, fastapi, gin, spring-boot..." }
+        }
+      }
+    },
+    "quality_gates": {
+      "type": "object",
+      "title": "Quality Gates",
+      "description": "Minimum thresholds that must be met before delivery",
+      "properties": {
+        "unit_test_coverage_minimum": {
+          "type": "number",
+          "title": "Minimum unit test coverage (%)",
+          "minimum": 90,
+          "maximum": 100,
+          "default": 99,
+          "x-ui": { "widget": "slider", "step": 0.5 }
+        },
+        "max_cyclomatic_complexity": {
+          "type": "integer",
+          "title": "Maximum cyclomatic complexity per function",
+          "minimum": 5,
+          "maximum": 20,
+          "default": 10
+        },
+        "max_microtask_lines": {
+          "type": "integer",
+          "title": "Maximum lines per micro-task",
+          "minimum": 20,
+          "maximum": 100,
+          "default": 50
+        },
+        "block_on_critical_vulnerabilities": {
+          "type": "boolean",
+          "title": "Block delivery on critical vulnerabilities",
+          "default": true
+        },
+        "block_on_high_vulnerabilities": {
+          "type": "boolean",
+          "title": "Block delivery on high vulnerabilities",
+          "default": true
+        },
+        "require_adr_for_architecture_decisions": {
+          "type": "boolean",
+          "title": "Require ADR for significant architecture decisions",
+          "default": true
+        },
+        "require_stride_analysis": {
+          "type": "boolean",
+          "title": "Require STRIDE analysis before delivery",
+          "default": true
+        }
+      }
+    },
+    "sla": {
+      "type": "object",
+      "title": "SLA / SLO Configuration",
+      "description": "Availability and performance targets",
+      "properties": {
+        "availability_sla_percent": {
+          "type": "number",
+          "title": "Availability SLA (%)",
+          "minimum": 95,
+          "maximum": 99.999,
+          "default": 99.9,
+          "x-ui": {
+            "widget": "select",
+            "options": [99, 99.5, 99.9, 99.95, 99.99, 99.999]
+          }
+        },
+        "latency_p95_ms": {
+          "type": "integer",
+          "title": "Latency SLO — p95 (ms)",
+          "minimum": 50,
+          "default": 300
+        },
+        "latency_p99_ms": {
+          "type": "integer",
+          "title": "Latency SLO — p99 (ms)",
+          "minimum": 100,
+          "default": 1000
+        },
+        "max_error_rate_percent": {
+          "type": "number",
+          "title": "Maximum error rate (%)",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 0.1
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "title": "Applicable Compliance Standards",
+      "properties": {
+        "gdpr": {
+          "type": "boolean",
+          "title": "GDPR / EU data protection",
+          "default": false
+        },
+        "iso_27001": {
+          "type": "boolean",
+          "title": "ISO 27001 — Information security management",
+          "default": false
+        },
+        "soc2": {
+          "type": "boolean",
+          "title": "SOC 2 Type II",
+          "default": false
+        },
+        "pci_dss": {
+          "type": "boolean",
+          "title": "PCI-DSS — Payment card industry",
+          "default": false
+        },
+        "hipaa": {
+          "type": "boolean",
+          "title": "HIPAA — Health information (US)",
+          "default": false
+        },
+        "iso_25000": {
+          "type": "boolean",
+          "title": "ISO/IEC 25000 (SQuaRE) — Software quality",
+          "default": false
+        },
+        "cmmi_level": {
+          "type": "integer",
+          "title": "CMMI Maturity Level target",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 3,
+          "x-ui": {
+            "showIf": { "field": "cmmi_required", "value": true }
+          }
+        }
+      }
+    },
+    "packs": {
+      "type": "object",
+      "title": "Active Packs",
+      "description": "Enable or disable specific enterprise planning packs",
+      "properties": {
+        "enterprise_architecture": {
+          "type": "boolean",
+          "title": "Enterprise Architecture Pack",
+          "description": "ADR templates, C4 diagrams, pattern decision trees",
+          "default": true
+        },
+        "security_compliance": {
+          "type": "boolean",
+          "title": "Security & Compliance Pack",
+          "description": "STRIDE, RBAC, audit trail, OWASP",
+          "default": true
+        },
+        "high_availability": {
+          "type": "boolean",
+          "title": "High Availability Pack",
+          "description": "HA patterns, SLA/SLO, circuit breakers, chaos engineering",
+          "default": true
+        },
+        "testing_coverage": {
+          "type": "boolean",
+          "title": "Testing Coverage Pack",
+          "description": "Test pyramid, coverage gates, load test templates",
+          "default": true
+        },
+        "acid_compliance": {
+          "type": "boolean",
+          "title": "ACID Compliance Pack",
+          "description": "Transaction boundaries, Saga, idempotency, rollback",
+          "default": true
+        }
+      }
+    }
+  }
+}

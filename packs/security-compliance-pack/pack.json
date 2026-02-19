@@ -1,0 +1,24 @@
+{
+  "name": "security-compliance-pack",
+  "version": "1.0.0",
+  "description": "Security and compliance planning pack. Provides STRIDE threat modeling, RBAC permission matrix design, audit trail schemas, OWASP checklist enforcement, and regulatory compliance mapping.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "activatedInPhases": [3, 6],
+  "hooks": {
+    "onPlanningStart": "./hooks/onInit.md#detectComplianceRequirements",
+    "onPhaseComplete": "./hooks/onInit.md#onPhaseComplete",
+    "onMicrotaskComplete": "./hooks/onInit.md#securityGateCheck",
+    "onDeliveryReportGenerate": "./hooks/onInit.md#deliveryReportSection"
+  },
+  "config": "./config.schema.json",
+  "provides": [
+    "STRIDE threat model templates (per module)",
+    "RBAC permission matrix design",
+    "Audit trail schema and event catalog",
+    "OWASP Top 10 compliance checklist",
+    "Secrets management checklist",
+    "Input validation and output sanitization templates",
+    "Regulatory compliance matrix (GDPR, ISO 27001, SOC2, PCI-DSS)"
+  ]
+}

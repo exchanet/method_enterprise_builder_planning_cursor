@@ -1,0 +1,25 @@
+{
+  "name": "enterprise-architecture-pack",
+  "version": "1.0.0",
+  "description": "Enterprise architecture planning pack. Provides ADR templates, C4 diagram generators, architectural pattern decision trees, and module-to-pack mapping tools.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "activatedInPhases": [5],
+  "hooks": {
+    "onPhaseComplete": "./hooks/onInit.md#onPhaseComplete",
+    "onDeliveryReportGenerate": "./hooks/onInit.md#onDeliveryReportSection"
+  },
+  "slots": {
+    "phase-output": "./hooks/onInit.md#phase5Output",
+    "adr-template": "./hooks/onInit.md#adrTemplate",
+    "delivery-report-section": "./hooks/onInit.md#reportSection"
+  },
+  "config": "./config.schema.json",
+  "provides": [
+    "ADR (Architecture Decision Record) templates",
+    "C4 model diagram generation (Level 1 and 2)",
+    "Pattern decision trees (Monolith vs Microservices vs Hexagonal vs CQRS vs Event Sourcing)",
+    "Core + Packs module mapping",
+    "Architecture smell detection"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Security & Compliance Pack Configuration",
+  "type": "object",
+  "properties": {
+    "authentication_scheme": {
+      "type": "string",
+      "title": "Authentication scheme",
+      "enum": ["jwt-rs256", "jwt-hs256", "oauth2-pkce", "saml2", "mtls", "api-key"],
+      "default": "jwt-rs256",
+      "x-ui": { "widget": "select" }
+    },
+    "authorization_model": {
+      "type": "string",
+      "title": "Authorization model",
+      "enum": ["rbac", "abac", "acl", "hybrid-rbac-abac"],
+      "default": "rbac"
+    },
+    "mfa_required_for": {
+      "type": "array",
+      "title": "Roles that require MFA",
+      "items": { "type": "string" },
+      "default": ["admin", "super_admin"],
+      "x-ui": { "widget": "tags" }
+    },
+    "audit_log_enabled": {
+      "type": "boolean",
+      "title": "Enable audit trail",
+      "default": true
+    },
+    "audit_log_retention_years": {
+      "type": "number",
+      "title": "Audit log retention (years)",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 3
+    },
+    "applicable_regulations": {
+      "type": "array",
+      "title": "Applicable regulations",
+      "items": {
+        "type": "string",
+        "enum": ["GDPR", "SOC2", "ISO-27001", "PCI-DSS", "HIPAA", "CCPA", "LGPD"]
+      },
+      "default": [],
+      "x-ui": { "widget": "checkbox-group" }
+    },
+    "stride_analysis_required": {
+      "type": "boolean",
+      "title": "Require STRIDE analysis per module",
+      "default": true
+    },
+    "owasp_checklist_required": {
+      "type": "boolean",
+      "title": "Require OWASP Top 10 checklist per release",
+      "default": true
+    },
+    "data_classification_levels": {
+      "type": "array",
+      "title": "Data classification levels",
+      "items": { "type": "string" },
+      "default": ["public", "internal", "confidential", "restricted"]
+    },
+    "encryption": {
+      "type": "object",
+      "title": "Encryption configuration",
+      "properties": {
+        "at_rest_algorithm": {
+          "type": "string",
+          "enum": ["AES-256-GCM", "AES-256-CBC", "none"],
+          "default": "AES-256-GCM"
+        },
+        "in_transit_min_tls": {
+          "type": "string",
+          "enum": ["TLS-1.0", "TLS-1.2", "TLS-1.3"],
+          "default": "TLS-1.3"
+        },
+        "password_hashing": {
+          "type": "string",
+          "enum": ["bcrypt-12", "bcrypt-10", "argon2id", "scrypt"],
+          "default": "bcrypt-12"
+        }
+      }
+    }
+  }
+}

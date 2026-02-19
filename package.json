@@ -1,0 +1,35 @@
+{
+  "name": "method-enterprise-builder-planning",
+  "version": "1.0.0",
+  "description": "Enterprise Builder Planning method for Cursor AI agents — systematically plans and builds enterprise-grade, mission-critical and high-availability software by combining Method Modular Design (Core + Packs) with PDCA-T quality cycle.",
+  "author": "Francisco J Bernades <@exchanet>",
+  "license": "MIT",
+  "keywords": [
+    "cursor",
+    "cursor-rules",
+    "cursor-skills",
+    "enterprise",
+    "enterprise-builder",
+    "planning",
+    "builder",
+    "modular-design",
+    "pdca-t",
+    "high-availability",
+    "acid-compliance",
+    "security-first",
+    "mission-critical",
+    "ai-coding-agent",
+    "method-enterprise-builder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exchanet/method_enterprise_builder_planning_cursor.git"
+  },
+  "peerDependencies": {
+    "method-modular-design": "github:exchanet/method_modular_design_cursor",
+    "method-pdca-t": "github:exchanet/method_pdca-t_coding_Cursor"
+  },
+  "engines": {
+    "cursor": ">=0.40.0"
+  }
+}
