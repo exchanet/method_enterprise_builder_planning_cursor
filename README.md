@@ -47,6 +47,19 @@ The hooks (`onMicrotaskComplete`, `onPhaseComplete`, etc.) and the pack system a
 
 ---
 
+## v2.0.0 — What's new
+
+| Component | What it adds |
+|---|---|
+| **ADR Validator** | CLI tool validating ADRs against 11 enterprise rules — gate for Phase 5 |
+| **Microtask Linter** | Validates ≤50 effective lines per file with automatic split suggestions |
+| **CI/CD Templates** | GitHub Actions, GitLab CI, Azure DevOps, Jenkins quality gate workflows |
+| **Multi-agent support** | Claude Code, Kimi Code, Windsurf adapters (same 8-phase protocol) |
+
+> **Breaking change:** `.cursor/` is now under `agents/cursor/.cursor/`. Run `scripts/migrate-to-v2.ps1` or `scripts/migrate-to-v2.sh`. See [MIGRATION-v2.md](docs/MIGRATION-v2.md).
+
+---
+
 ## See it in action
 
 Before installing, read the **[complete executed walkthrough](examples/banking-walkthrough.md)** — a real agent session building a banking payment authorization module from start to finish. It shows the exact output for every phase: stakeholder maps, micro-task backlog, full ADRs with rejected alternatives, actual TypeScript code, test assertions, and a completed delivery report. No placeholders.
@@ -55,7 +68,7 @@ Before installing, read the **[complete executed walkthrough](examples/banking-w
 
 ## Quick Start
 
-### Express installation (recommended)
+### Express installation — Cursor (recommended)
 
 1. Download this repository as `.zip` from [GitHub](https://github.com/exchanet/method_enterprise_builder_planning_cursor) and unzip it
 2. Copy the path to the unzipped folder — for example: `C:\Users\your-name\Downloads\method-enterprise_builder_planning`
@@ -68,6 +81,27 @@ Install this method so I can use it in Cursor: C:\Users\your-name\Downloads\meth
 
 5. Close and reopen Cursor
 6. To use it, type in any chat: `/method-enterprise_builder`
+
+### Install for other agents
+
+```bash
+# Claude Code
+cp agents/claude-code/CLAUDE.md /path/to/your-project/
+cp -r agents/claude-code/.claude /path/to/your-project/
+
+# Kimi Code
+cp agents/kimi-code/KIMI.md /path/to/your-project/
+
+# Windsurf
+cp agents/windsurf/WINDSURF.md /path/to/your-project/
+
+# Google Antigravity
+cp agents/antigravity/AGENTS.md /path/to/your-project/
+cp agents/antigravity/GEMINI.md /path/to/your-project/  # Optional (Gemini-specific)
+cp -r agents/antigravity/.agent /path/to/your-project/
+```
+
+See [agents/README.md](agents/README.md) for the full agent comparison table.
 
 ### Manual installation
 
@@ -186,6 +220,47 @@ method-enterprise_builder_planning/
 ├── README.md
 └── README.es.md
 ```
+
+---
+
+## Executable tools (v2.0.0)
+
+### ADR Validator
+
+Validates Architecture Decision Records against 11 enterprise rules before marking them Accepted.
+
+```bash
+# Validate all ADRs in your project
+node packs/enterprise-architecture-pack/validators/adr-validator/src/index.ts docs/adr/
+
+# CI/CD (JUnit XML output)
+node packs/enterprise-architecture-pack/validators/adr-validator/src/index.ts \
+  --format=junit --output=reports/adr-results.xml docs/adr/
+```
+
+### Microtask Linter
+
+Validates that source files comply with the ≤50 effective lines rule, with split suggestions.
+
+```bash
+# Validate a single file
+node packs/enterprise-microtask-planner-pack/validators/microtask-linter/src/index.ts \
+  --task=src/payments/domain/money.ts
+
+# Validate all files in a directory
+node packs/enterprise-microtask-planner-pack/validators/microtask-linter/src/index.ts \
+  --dir=src/ --recursive
+```
+
+### CI/CD Quality Gates
+
+```bash
+# Copy GitHub Actions workflow to your project
+cp .ci-cd/templates/github-actions/workflow-enterprise-builder.yml \
+   .github/workflows/enterprise-builder.yml
+```
+
+Available for: GitHub Actions, GitLab CI, Azure DevOps, Jenkins. See [.ci-cd/README.md](.ci-cd/README.md).
 
 ---
 

@@ -1,0 +1,19 @@
+{
+  "name": "enterprise-microtask-planner-pack",
+  "version": "2.0.0",
+  "description": "Micro-task decomposition guidance and enforcement for enterprise systems. Validates ≤50-line micro-tasks and provides split suggestions.",
+  "author": "Francisco J Bernades",
+  "license": "MIT",
+  "activatedInPhases": [4],
+  "hooks": {
+    "onInit": "hooks/onInit.md",
+    "onMicrotaskComplete": "Validate effective line count ≤50 before marking task complete",
+    "onPhaseComplete": "Generate summary of micro-task split statistics for Phase 4"
+  },
+  "provides": [
+    "micro-task decomposition algorithm",
+    "line count validation (≤50 effective lines)",
+    "automatic split suggestions when limit exceeded",
+    "TypeScript and Python language support"
+  ]
+}

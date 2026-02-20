@@ -1,0 +1,62 @@
+default:
+  image: node:22-alpine
+
+variables:
+  NODE_ENV: test
+
+stages:
+  - gate-1-context
+  - gate-3-risks
+  - gate-5-adrs
+  - gate-7-tests
+  - gate-8-delivery
+
+validate-context:
+  stage: gate-1-context
+  script:
+    - |
+      if [ ! -f "docs/enterprise-context.md" ]; then
+        echo "Phase 1 incomplete: missing docs/enterprise-context.md"; exit 1
+      fi
+      echo "Enterprise context document found"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+validate-adrs:
+  stage: gate-5-adrs
+  script:
+    - mkdir -p reports
+    - |
+      if [ -d "docs/adr" ] && ls docs/adr/*.md 1>/dev/null 2>&1; then
+        node --experimental-strip-types \
+          packs/enterprise-architecture-pack/validators/adr-validator/src/index.ts \
+          --format=junit --output=reports/adr-validation.xml docs/adr/
+      fi
+  artifacts:
+    reports:
+      junit: reports/adr-validation.xml
+
+test-quality-gate:
+  stage: gate-7-tests
+  script:
+    - npm ci
+    - npm test -- --coverage
+    - bash .ci-cd/scripts/coverage-check.sh --threshold=99
+    - bash .ci-cd/scripts/microtask-lint.sh --dir=src
+  artifacts:
+    paths:
+      - reports/
+      - coverage/
+    expire_in: 30 days
+
+validate-delivery:
+  stage: gate-8-delivery
+  script:
+    - bash .ci-cd/scripts/validate-delivery.sh
+  only:
+    - main
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 90 days

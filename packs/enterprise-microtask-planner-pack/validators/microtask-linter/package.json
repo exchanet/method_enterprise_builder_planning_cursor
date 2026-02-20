@@ -1,0 +1,22 @@
+{
+  "name": "@enterprise-builder/microtask-linter",
+  "version": "1.0.0",
+  "description": "Validates that code files comply with the ≤50 effective lines micro-task rule. Supports TypeScript and Python.",
+  "author": "Francisco J Bernades",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "microtask-linter": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

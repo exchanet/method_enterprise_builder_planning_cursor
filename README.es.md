@@ -47,6 +47,19 @@ Los hooks (`onMicrotaskComplete`, `onPhaseComplete`, etc.) y el sistema de packs
 
 ---
 
+## v2.0.0 — Novedades
+
+| Componente | Qué añade |
+|---|---|
+| **ADR Validator** | CLI que valida ADRs contra 11 reglas enterprise — gate para la Fase 5 |
+| **Microtask Linter** | Valida ≤50 líneas efectivas por archivo con sugerencias de división automática |
+| **Templates CI/CD** | Workflows para GitHub Actions, GitLab CI, Azure DevOps, Jenkins |
+| **Soporte multi-agente** | Adaptadores para Claude Code, Kimi Code, Windsurf (mismo protocolo de 8 fases) |
+
+> **Breaking change:** `.cursor/` ahora está en `agents/cursor/.cursor/`. Ejecuta `scripts/migrate-to-v2.ps1` (Windows) o `scripts/migrate-to-v2.sh` (macOS/Linux). Ver [MIGRATION-v2.md](docs/MIGRATION-v2.md).
+
+---
+
 ## Véelo en acción
 
 Antes de instalarlo, lee el **[walkthrough completo y ejecutado](examples/banking-walkthrough.md)** — una sesión de agente real construyendo un módulo de autorización de pagos bancarios de principio a fin. Muestra el output exacto para cada fase: mapas de stakeholders, backlog de micro-tareas, ADRs completos con alternativas rechazadas, código TypeScript real, assertions de tests y un delivery report completado. Sin placeholders.
@@ -55,7 +68,7 @@ Antes de instalarlo, lee el **[walkthrough completo y ejecutado](examples/bankin
 
 ## Inicio rápido
 
-### Instalación express (recomendado)
+### Instalación express — Cursor (recomendado)
 
 1. Descarga este repositorio como `.zip` desde [GitHub](https://github.com/exchanet/method_enterprise_builder_planning_cursor) y descomprímelo
 2. Copia la ruta de la carpeta descomprimida — por ejemplo: `C:\Users\tu-nombre\Downloads\method-enterprise_builder_planning`
@@ -68,6 +81,27 @@ Instala este método para que pueda utilizarlo en Cursor: C:\Users\tu-nombre\Dow
 
 5. Cierra y vuelve a abrir Cursor
 6. Para utilizarlo directamente, escribe en cualquier chat: `/method-enterprise_builder`
+
+### Instalación para otros agentes
+
+```bash
+# Claude Code
+cp agents/claude-code/CLAUDE.md /ruta/a/tu-proyecto/
+cp -r agents/claude-code/.claude /ruta/a/tu-proyecto/
+
+# Kimi Code
+cp agents/kimi-code/KIMI.md /ruta/a/tu-proyecto/
+
+# Windsurf
+cp agents/windsurf/WINDSURF.md /ruta/a/tu-proyecto/
+
+# Google Antigravity
+cp agents/antigravity/AGENTS.md /ruta/a/tu-proyecto/
+cp agents/antigravity/GEMINI.md /ruta/a/tu-proyecto/  # Opcional (específico de Gemini)
+cp -r agents/antigravity/.agent /ruta/a/tu-proyecto/
+```
+
+Ver [agents/README.md](agents/README.md) para la tabla comparativa completa de agentes.
 
 ### Instalación manual
 

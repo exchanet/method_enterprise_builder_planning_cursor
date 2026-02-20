@@ -1,0 +1,72 @@
+trigger:
+  branches:
+    include: [main, develop]
+
+pr:
+  branches:
+    include: [main]
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  nodeVersion: '22'
+
+stages:
+- stage: QualityGates
+  displayName: Enterprise Builder Quality Gates
+  jobs:
+
+  - job: ValidateContext
+    displayName: Gate 1 - Enterprise Context
+    steps:
+    - bash: |
+        [ -f "docs/enterprise-context.md" ] || { echo "Missing enterprise-context.md"; exit 1; }
+        echo "Enterprise context document found"
+      displayName: Check enterprise context
+
+  - job: ValidateADRs
+    displayName: Gate 5 - ADR Validation
+    dependsOn: ValidateContext
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(nodeVersion)
+    - bash: |
+        mkdir -p reports
+        if [ -d "docs/adr" ] && ls docs/adr/*.md 1>/dev/null 2>&1; then
+          node --experimental-strip-types \
+            packs/enterprise-architecture-pack/validators/adr-validator/src/index.ts \
+            --format=junit --output=reports/adr-validation.xml docs/adr/
+        fi
+      displayName: Validate ADRs
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFormat: JUnit
+        testResultsFiles: reports/adr-validation.xml
+
+  - job: TestQualityGate
+    displayName: Gate 7 - Tests and Coverage
+    dependsOn: ValidateADRs
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(nodeVersion)
+    - script: npm ci && npm test -- --coverage
+      displayName: Run tests with coverage
+    - bash: bash .ci-cd/scripts/coverage-check.sh --threshold=99
+      displayName: Validate coverage >=99%
+    - bash: bash .ci-cd/scripts/microtask-lint.sh --dir=src
+      displayName: Microtask line lint
+    - task: PublishCodeCoverageResults@2
+      inputs:
+        summaryFileLocation: coverage/coverage-summary.json
+
+  - job: ValidateDelivery
+    displayName: Gate 8 - Delivery Sign-off
+    dependsOn: TestQualityGate
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    steps:
+    - bash: bash .ci-cd/scripts/validate-delivery.sh
+      displayName: Delivery gate

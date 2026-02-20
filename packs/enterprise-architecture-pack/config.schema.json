@@ -69,6 +69,35 @@
       },
       "default": [1, 2],
       "description": "L1: System Context, L2: Container, L3: Component, L4: Code"
+    },
+    "validation": {
+      "type": "object",
+      "title": "ADR Validation Settings",
+      "description": "Controls the adr-validator tool (packs/enterprise-architecture-pack/validators/adr-validator/)",
+      "properties": {
+        "adr_validation_enabled": {
+          "type": "boolean",
+          "title": "Enable ADR validation before marking as Accepted",
+          "default": true
+        },
+        "strict_mode": {
+          "type": "boolean",
+          "title": "Strict mode — treat warnings as errors",
+          "default": false
+        },
+        "required_rules": {
+          "type": "array",
+          "title": "Rules that must pass (empty = all rules active)",
+          "items": { "type": "string" },
+          "default": ["ADR-STR-001", "ADR-STR-002", "ADR-ENT-001", "ADR-ENT-002", "ADR-ENT-003", "ADR-ENT-004", "ADR-ENT-005"]
+        },
+        "ci_format": {
+          "type": "string",
+          "title": "Output format for CI/CD pipeline",
+          "enum": ["console", "json", "junit"],
+          "default": "junit"
+        }
+      }
     }
   }
 }

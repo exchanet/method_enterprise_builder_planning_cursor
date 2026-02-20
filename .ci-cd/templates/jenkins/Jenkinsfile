@@ -1,0 +1,77 @@
+pipeline {
+    agent { docker { image 'node:22-alpine' } }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    stages {
+        stage('Gate 1: Enterprise Context') {
+            steps {
+                sh '''
+                    [ -f "docs/enterprise-context.md" ] || {
+                        echo "Phase 1 incomplete: missing docs/enterprise-context.md"
+                        exit 1
+                    }
+                    echo "Enterprise context document found"
+                '''
+            }
+        }
+
+        stage('Gate 5: ADR Validation') {
+            steps {
+                sh 'mkdir -p reports'
+                sh '''
+                    if [ -d "docs/adr" ] && ls docs/adr/*.md 1>/dev/null 2>&1; then
+                        node --experimental-strip-types \
+                            packs/enterprise-architecture-pack/validators/adr-validator/src/index.ts \
+                            --format=junit --output=reports/adr-validation.xml docs/adr/
+                    else
+                        echo "No ADRs found — skipping"
+                    fi
+                '''
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: 'reports/adr-validation.xml'
+                }
+            }
+        }
+
+        stage('Gate 7: Tests & Coverage') {
+            steps {
+                sh 'npm ci'
+                sh 'npm test -- --coverage'
+                sh 'bash .ci-cd/scripts/coverage-check.sh --threshold=99'
+                sh 'bash .ci-cd/scripts/microtask-lint.sh --dir=src'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reports/**, coverage/**', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Gate 8: Delivery Sign-off') {
+            when { branch 'main' }
+            steps {
+                sh 'bash .ci-cd/scripts/validate-delivery.sh'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Quality gate FAILED. Review the build output and fix issues before merging.'
+        }
+        success {
+            echo 'All enterprise quality gates PASSED.'
+        }
+    }
+}

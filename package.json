@@ -1,13 +1,16 @@
 {
   "name": "method-enterprise-builder-planning",
-  "version": "1.0.0",
-  "description": "Enterprise Builder Planning method for Cursor AI agents — systematically plans and builds enterprise-grade, mission-critical and high-availability software by combining Method Modular Design (Core + Packs) with PDCA-T quality cycle.",
+  "version": "2.0.0",
+  "description": "Hybrid framework for enterprise software planning and building. Core is a structured prompt system for LLM coding agents (Cursor, Claude Code, Kimi Code, Windsurf), complemented by standalone executable tools: ADR Validator, Microtask Linter, and CI/CD quality gate templates.",
   "author": "Francisco J Bernades <@exchanet>",
   "license": "MIT",
   "keywords": [
     "cursor",
     "cursor-rules",
     "cursor-skills",
+    "claude-code",
+    "windsurf",
+    "kimi-code",
     "enterprise",
     "enterprise-builder",
     "planning",
@@ -19,17 +22,28 @@
     "security-first",
     "mission-critical",
     "ai-coding-agent",
+    "adr-validator",
+    "microtask-linter",
+    "ci-cd",
+    "quality-gates",
     "method-enterprise-builder"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/exchanet/method_enterprise_builder_planning_cursor.git"
   },
+  "scripts": {
+    "validate:adrs": "node --experimental-strip-types packs/enterprise-architecture-pack/validators/adr-validator/src/index.ts docs/adr/",
+    "lint:microtasks": "node --experimental-strip-types packs/enterprise-microtask-planner-pack/validators/microtask-linter/src/index.ts --dir=src/",
+    "test:adr-validator": "cd packs/enterprise-architecture-pack/validators/adr-validator && npm test",
+    "test:microtask-linter": "cd packs/enterprise-microtask-planner-pack/validators/microtask-linter && npm test"
+  },
   "peerDependencies": {
     "method-modular-design": "github:exchanet/method_modular_design_cursor",
     "method-pdca-t": "github:exchanet/method_pdca-t_coding_Cursor"
   },
   "engines": {
-    "cursor": ">=0.40.0"
+    "cursor": ">=0.40.0",
+    "node": ">=22.0.0"
   }
 }

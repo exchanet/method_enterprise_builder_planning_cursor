@@ -1,0 +1,24 @@
+{
+  "name": "@enterprise-builder/adr-validator",
+  "version": "1.0.0",
+  "description": "Enterprise ADR (Architecture Decision Record) validator for Method Enterprise Builder Planning",
+  "author": "Francisco J Bernades",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "adr-validator": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate": "node --experimental-strip-types src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
